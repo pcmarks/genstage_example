@@ -1,6 +1,6 @@
 # GenStage Example
 
-An example using the GenStage Elixir Module. Please see this [post](http://elixir-lang.org/blog/2016/07/14/announcing-genstage/) for a description of GenStage and this [post]() for a description of the example.
+An example using the GenStage Elixir Module. Please see this [post](http://elixir-lang.org/blog/2016/07/14/announcing-genstage/) for a description of GenStage and this [post](http://www.elixirfbp.org/2016/07/genstage-example.html) for a description of the example.
 
 ## Setup
 
