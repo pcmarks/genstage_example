@@ -2,9 +2,18 @@ alias Experimental.GenStage
 
 defmodule GenstageExample do
   @moduledoc """
-  The Map stage supplies a string - a url - on demand.
+  This is a simple example of setting up a data flow using the GenStage behaviour.
+  It is based on the demo developed by the New York Times R&D team using their
+  [Streamtools] (https://source.opennews.org/en-US/articles/introducing-streamtools/) graphical data flow builder.
+
+  The flow begins by accessing a New York Citibike data feed. A list of bike
+  stations is extracted. A particular bike station is pulled from this list.
+  Finally, the json data about the bike station is printed to the console.
   """
   defmodule Map do
+    @moduledoc """
+    The Map stage supplies a string - a url - on demand.
+    """
     use GenStage
     def init(url) do
       {:producer, url}
@@ -14,11 +23,11 @@ defmodule GenstageExample do
       {:noreply, events, url}
     end
   end
-  @moduledoc """
-  The GetHTTP stage expects a url string. It fetches the page. It assumes that
-  the response is json-formatted. The json is converted to KeyMap
-  """
   defmodule GetHTTP do
+    @moduledoc """
+    The GetHTTP stage expects a url string. It fetches the page. It assumes that
+    the response is json-formatted. The json is converted to KeyMap
+    """
     use GenStage
     def init(_) do
       {:producer_consumer, :ok}
@@ -32,11 +41,11 @@ defmodule GenstageExample do
       Poison.Parser.parse!(body)
     end
   end
-  @moduledoc """
-  The Unpack stage expects a KeyMap event and uses the state string element
-  as a key to extract a value.
-  """
   defmodule Unpack do
+    @moduledoc """
+    The Unpack stage expects a KeyMap event and uses the state string element
+    as a key to extract a value.
+    """
     use GenStage
     def init(element) do
       {:producer_consumer, element}
@@ -46,11 +55,11 @@ defmodule GenstageExample do
       {:noreply, events, element}
     end
   end
-  @moduledoc """
-  The Unpack stage expects a list of KeyMaps. It filters this list for those
-  elements that match a specified value.
-  """
   defmodule Filter do
+    @moduledoc """
+    The Unpack stage expects a list of KeyMaps. It filters this list for those
+    elements that match a specified value.
+    """
     use GenStage
     def init({filter, filter_value}) do
       {:producer_consumer, {filter, filter_value}}
@@ -63,10 +72,10 @@ defmodule GenstageExample do
       {:noreply, events, state}
     end
   end
-  @moduledoc """
-  This stage provides the demand to begin the flow of events
-  """
   defmodule Ticker do
+    @moduledoc """
+    This stage provides the demand to begin the flow of events
+    """
     use GenStage
     def init(sleeping_time) do
       {:consumer, sleeping_time}
